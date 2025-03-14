@@ -2,6 +2,8 @@
 
 ![alt text](image.png)
 ## 1. Problema na criação manual de dependências
+> app/Http/Controllers/CompanyController.php
+> Isso ocorre em vários outros lugares, esse ponto é aberta para uma discussão geral sobre o projeto
 
 ❌ No código atual do método `update`, as dependências são criadas manualmente dentro do método usando o operador `new`. Isso cria um acoplamento forte entre o controller e as implementações concretas (`UpdateDomain`, `CompanyUpdate` e `Company::find`). Essa abordagem torna o código difícil de testar, já que não é possível substituir essas dependências por mocks em testes unitários, além de violar o princípio de inversão de dependência do SOLID.
 

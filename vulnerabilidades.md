@@ -19,7 +19,6 @@ Exemplo do erro:
 ```php
 $this->builder->whereRaw("name LIKE '%" . $this->name . "%'");
 ```
-Esse tipo de implementação não realiza a devida validação ou  sanitização das variáveis, o que permite que entradas maliciosas sejam executadas diretamente na query SQL.
 
 ✅ Uma forma mais segura e recomendada de construir consultas no Laravel  é utilizando o método `where()` ou outros métodos de consulta do Eloquent,  que automaticamente escapam as variáveis, prevenindo SQL Injection. Um exemplo de implementação segura seria:
 ```php
@@ -45,7 +44,7 @@ Isso torna o código mais seguro, legível e fácil de manter.
 ## 4. Dados sensíveis no error handling
 > app/UseCases/User/Create.php
 
-❌ No use case para criação de um usuário, é utilizado um bloco try-catch para capturar exceções durante o processo de criação. Caso ocorra um erro, a função `defaultErrorHandling()` é chamada,e os parâmetros do usuário (contidos em `CreateParams`), incluindo a senha, são passados para esse método. O problema é que, ao fazer isso, dados sensíveis, como a senha do usuário, podem ser registrados no log dentro do `defaultErrorHandling`. 
+❌ No use case para criação de um usuário, é utilizado um bloco try-catch para capturar exceções durante o processo de criação. Caso ocorra um erro, a função `defaultErrorHandling()` é chamada, e os parâmetros do usuário (contidos em `CreateParams`), incluindo a senha, são passados para esse método. O problema é que, ao fazer isso, dados sensíveis, como a senha do usuário, podem ser registrados no log dentro do `defaultErrorHandling`. 
 
 Esse tipo de prática representa um risco sério de **vazamento de dados sensíveis**. Registros de logs não devem armazenar informações críticas, como senhas, dados financeiros, ou qualquer outro dado pessoal e confidencial. Isso poderia ser explorado em caso de comprometimento do sistema de logs, expondo informações do usuário a potenciais atacantes.
 
@@ -54,3 +53,9 @@ Logar senhas, mesmo que em um ambiente de erro, pode colocar em risco a seguran�
 ✅ Para evitar esse risco, é necessário **sanitizar os dados** antes de passá-los para os logs. Uma solução simples seria remover a senha dos parâmetros antes de passá-los para o `defaultErrorHandling`. Isso pode ser feito utilizando a função `unset()` para garantir que a senha não seja registrada. Além disso, é possível criar um **método de logging especializado** que permite fazer a sanitização dos dados automaticamente, removendo campos sensíveis como senhas antes de fazer qualquer log.
 
 Alternativamente, se os dados do usuário não forem necessários para o log, a solução mais segura seria **não enviar os dados sensíveis para o log**. Em vez disso, seria mais adequado registrar apenas um identificador único ou uma referência ao erro, sem expor dados críticos.
+
+## 5. Verificação de Permissões de Acesso
+
+❌ Atualmente, o sistema realiza a verificação de forma inadequada, acessando as propriedades do usuário antes de verificar se ele está autenticado. Isso pode levar a erros de execução, especialmente quando o usuário não está logado, resultando em uma tentativa de acessar uma propriedade de um objeto `null`, o que provoca uma exceção.
+
+✅ A correção mais adequada seria verificar primeiro se o usuário está autenticado antes de acessar suas propriedades.

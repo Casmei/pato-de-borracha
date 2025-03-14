@@ -1,4 +1,4 @@
-# Performace - Victor Jácomo
+# Performace
  
 ## 1. Busca por Empresa desnecessária
 
@@ -6,9 +6,7 @@
 
 ❌ No código atual, após a chamada ao método `CompanyUpdate`, é realizada uma busca adicional no banco de dados utilizando `Company::find()`. No entanto, essa busca é redundante, pois o próprio método de atualização (`CompanyUpdate`) já retorna os dados atualizados. Além disso, não há validação de dados, o que torna o uso do `UpdateDomain` questionável. 
 
-O problema aqui é que a aplicação está fazendo dois acessos ao banco: um para atualizar os dados e outro para recuperar os dados já atualizados, o que pode ser evitado, melhorando a eficiência do código e reduzindo a carga no banco de dados. 
-
-✅ A recomendação é remover a busca redundante usando `Company::find()`, e retornar diretamente os dados atualizados após o `UpdateDomain`. Isso economiza um acesso adicional ao banco, simplificando a lógica e melhorando a performance da aplicação. 
+✅ A recomendação é remover a busca redundante usando `Company::find()`, e retornar diretamente os dados atualizados após o `UpdateDomain`. Isso economiza um acesso adicional ao banco, simplificando a lógica e melhorando a performance da aplicação. (E, se fizer sentido, remover o UpdateDomain)
 
 ## 2. Verificações de dados unicos de forma geral
 

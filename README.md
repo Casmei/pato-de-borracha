@@ -1,6 +1,6 @@
 # Resumo do Projeto
 
-Este repositório contém documentação importante sobre boas práticas, problemas comuns e dicas para desenvolvimento de aplicações PHP/Laravel. Abaixo você encontrará links para os recursos disponíveis:
+Este repositório contém minha análise sobre o projeto proposto para o desafio da [Coloque o nome da empresa aqui] _brincadeira gente, só para quebrar o gelo_. Abaixo você encontrará links para os recursos disponíveis:
 
 ## Documentação Disponível
 
