@@ -83,3 +83,42 @@ public function register()
 ```
 
 Isso permite que o código seja mais limpo, com menos acoplamento e mais fácil de testar e manter.
+
+## 4. Gateway acoplado
+❌ Eu senti que o acoplamento de serviços é um problema geral do código, em diferentes camadas, mas eu gostaria de comentar, em especifico, sobre a do Gateway, responsável pela conexão com serviços bancários externos. Este acoplamento dificulta a troca de Gateways (uma necessidade mais comum do que se imagina) de maneira rápida e segura. Em projetos anteriores que participei, estavamos enfrentando problemas com um gateway X, conseguimos migrar para outro simplesmente implementando uma nova classe concreta que respeitava o contrato definido pela interface, sem necessidade de alterações em outras partes do sistema.
+
+✅ Implementar interfaces para abstrair os gateways permite:
+- Substituir provedores de pagamento sem modificar o código de negócio
+- Executar testes unitários com mocks de gateways
+- Criar implementações específicas para diferentes cenários
+
+```php
+interface PaymentGatewayInterface
+{
+    public function processPayment(Order $order): PaymentResult;
+    public function refund(string $transactionId): RefundResult;
+    public function getInstallmentOptions(float $amount): array;
+}
+
+class ConcretePaymentGateway implements PaymentGatewayInterface
+{
+    // Implementação específica
+}
+```
+
+### Smart Gateways (Uma ideia que eu tive)
+Os Smart Gateways utilizam o padrão Factory para selecionar dinamicamente o gateway mais adequado com base em regras de negócio. Por exemplo: se um cliente precisa de parcelamento em 12x, mas o gateway principal suporta apenas 8x, o Smart Gateway pode redirecionar automaticamente para um gateway alternativo que ofereça essa condição.
+
+```php
+class PaymentGatewayFactory
+{
+    public function createGateway(Order $order): PaymentGatewayInterface
+    {
+        if ($order->installments > 8) {
+            return new AlternativeGateway();
+        }
+        
+        return new PrimaryGateway();
+    }
+}
+```
