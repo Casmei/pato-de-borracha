@@ -35,7 +35,7 @@
 
 ✅ Remover o `where` e deixar o método `update` lidar com a atualização do registro de forma direta e eficiente, já que o `id` ou outro identificador único já é suficiente para localizar o registro a ser alterado.
 
-## 4. Uso desnecessário de `where` antes do `find`
+## 5. Uso desnecessário de `where` antes do `find`
 
 > app/Repositories/User/Find.php
 
