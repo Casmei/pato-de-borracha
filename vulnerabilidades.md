@@ -59,3 +59,9 @@ Alternativamente, se os dados do usuário não forem necessários para o log, a 
 ❌ Atualmente, o sistema realiza a verificação de forma inadequada, acessando as propriedades do usuário antes de verificar se ele está autenticado. Isso pode levar a erros de execução, especialmente quando o usuário não está logado, resultando em uma tentativa de acessar uma propriedade de um objeto `null`, o que provoca uma exceção.
 
 ✅ A correção mais adequada seria verificar primeiro se o usuário está autenticado antes de acessar suas propriedades.
+
+## 6. Arquivo de Env
+
+❌ O projeto possui um arquivo de variáveis de ambiente de exemplo, o que é super normal para experiencia de setup do projeto, o problema é que o mesmo está expondo o `BANKING_CLIENT_SECRET` e o `BANKING_CLIENT_ID` no Github.
+
+✅ Remover o value dessas envs de exemplo
